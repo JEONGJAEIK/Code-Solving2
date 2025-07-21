@@ -3,63 +3,49 @@ package org.practice.bd우선탐색;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class b7576 {
-    static int[][] map;
+
+    static int[][] maps;
     static boolean[][] visited;
-    static int[][] distance;
     static int[] dy = {1, -1, 0, 0};
-    static int[] dx = {0, 0, -1, 1};
-    static Queue<int[]> queue = new LinkedList<>();
+    static int[] dx = {0, 0, 1, -1};
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
+
         int width = Integer.parseInt(st.nextToken());
         int height = Integer.parseInt(st.nextToken());
-        map = new int[height][width];
+
+        maps = new int[height][width];
         visited = new boolean[height][width];
-        distance = new int[height][width];
+        int tomatoCheck = 0;
+
+        List<int[]> start = new ArrayList<>();
+
         for (int i = 0; i < height; i++) {
             st = new StringTokenizer(br.readLine());
             for (int j = 0; j < width; j++) {
-                int tomato = Integer.parseInt(st.nextToken());
-                map[i][j] = tomato;
-            }
-        }
-
-        int tomatoCount = 0;
-        for (int i = 0; i < height; i++) {
-            for (int j = 0; j < width; j++) {
-                if (map[i][j] == 1) {
-                    tomatoCount++;
+                maps[i][j] = Integer.parseInt(st.nextToken());
+                tomatoCheck++;
+                if (maps[i][j] == 1) {
+                    start.add(new int[]{i, j});
                 }
             }
         }
 
-        if (tomatoCount == height * width) {
+        if (tomatoCheck == 0) {
             System.out.println(0);
             return;
-        } else {
-            tomatoCount = 0;
         }
+
+        bfs(start);
 
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
-                if (map[i][j] == 1) {
-                    queue.add(new int[]{i, j});
-                    visited[i][j] = true;
-                }
-            }
-        }
-        bfs(queue);
-
-        for (int i = 0; i < height; i++) {
-            for (int j = 0; j < width; j++) {
-                if (map[i][j] == 0) {
+                if (maps[i][j] == 0) {
                     System.out.println(-1);
                     return;
                 }
@@ -67,32 +53,37 @@ public class b7576 {
         }
 
         int max = 0;
-        for (int i = 0; i < height; i++) {
-            for (int j = 0; j < width; j++) {
-                if (distance[i][j] > max) {
-                    max = distance[i][j];
-                }
+        for (int[] map : maps) {
+            Arrays.sort(map);
+            if (max < map[maps[0].length - 1]) {
+                max = map[maps[0].length - 1];
             }
         }
-        System.out.println(max);
+        System.out.println(max - 1);
     }
 
-    static void bfs(Queue<int[]> queue) {
+    static void bfs(List<int[]> start) {
+        Queue<int[]> queue = new LinkedList<>();
+
+        for (int[] ints : start) {
+            queue.offer(ints);
+            visited[ints[0]][ints[1]] = true;
+        }
+
         while (!queue.isEmpty()) {
             int[] current = queue.poll();
-            int cy = current[0];
-            int cx = current[1];
+            int y = current[0];
+            int x = current[1];
 
             for (int i = 0; i < 4; i++) {
-                int ny = cy + dy[i];
-                int nx = cx + dx[i];
+                int ny = y + dy[i];
+                int nx = x + dx[i];
 
-                if (ny >= 0 && nx >= 0 && ny < map.length && nx < map[0].length) {
-                    if (!visited[ny][nx] && map[ny][nx] == 0) {
+                if (ny >= 0 && nx >= 0 && ny < maps.length && nx < maps[0].length) {
+                    if (!visited[ny][nx] && maps[ny][nx] != -1) {
+                        maps[ny][nx] = maps[y][x] + 1;
+                        queue.offer(new int[]{ny, nx});
                         visited[ny][nx] = true;
-                        distance[ny][nx] = distance[cy][cx] + 1;
-                        map[ny][nx] = 1;
-                        queue.add(new int[]{ny, nx});
                     }
                 }
             }

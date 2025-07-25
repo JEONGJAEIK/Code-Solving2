@@ -4,8 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-// 골드 2
-// 피보나치 수 6
+// 골드 2 피보나치 수 6
 // 100경 번째 피보나치를 구해야 함 시간 제한은 1억 번 연산 이내로 제한
 public class b11444 {
     static final long MOD = 1_000_000_007L;

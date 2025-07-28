@@ -2,7 +2,7 @@ plugins {
     id("java")
 }
 
-group = "org.practice"
+group = "org.problem"
 version = "1.0-SNAPSHOT"
 
 repositories {

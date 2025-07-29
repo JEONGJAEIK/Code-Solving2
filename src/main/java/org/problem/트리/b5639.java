@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+// 골드 5 이진 검색 트리
 public class b5639 {
 
     static class Node {
@@ -32,8 +33,10 @@ public class b5639 {
         }
 
         void postorder() {
-            if (this.left != null) left.postorder();
-            if (this.right != null) right.postorder();
+            if (this.left != null)
+                left.postorder();
+            if (this.right != null)
+                right.postorder();
             System.out.println(this.value);
         }
 
@@ -52,9 +55,7 @@ public class b5639 {
             }
         }
 
-
-            root.postorder();
-
+        root.postorder();
 
     }
 }

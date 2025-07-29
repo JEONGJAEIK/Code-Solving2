@@ -1,4 +1,4 @@
-package org.problem.bd우선탐색;
+package org.problem.bd우선탐색.실버;
 
 import java.util.LinkedList;
 import java.util.Queue;

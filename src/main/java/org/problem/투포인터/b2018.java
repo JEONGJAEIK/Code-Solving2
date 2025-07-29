@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+// 실버 5 수들의 합 5
 public class b2018 {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -12,7 +13,6 @@ public class b2018 {
         int start = 1;
         int end = 1;
         int sum = 1;
-
 
         while (end != number) {
             if (sum == number) {

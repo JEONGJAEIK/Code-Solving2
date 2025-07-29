@@ -2,6 +2,7 @@ package org.problem.dp;
 
 import java.io.*;
 
+// 실버 3 피보나치 함수
 public class b1003 {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));

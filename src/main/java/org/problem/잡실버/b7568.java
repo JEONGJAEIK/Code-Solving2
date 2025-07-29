@@ -3,6 +3,7 @@ package org.problem.잡실버;
 import java.io.*;
 import java.util.StringTokenizer;
 
+// 실버 5 덩치
 public class b7568 {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -20,14 +21,14 @@ public class b7568 {
 
         for (int i = 0; i < people.length; i++) {
             for (int j = 0; j < i; j++) {
-                    if (people[i][0] > people[j][0] && people[i][1] > people[j][1]) {
-                        people[j][2] += 1;
-                    } else if (people[i][0] < people[j][0] && people[i][1] < people[j][1]) {
-                        people[i][2] += 1;
-                    } else {
-                        continue;
-                    }
+                if (people[i][0] > people[j][0] && people[i][1] > people[j][1]) {
+                    people[j][2] += 1;
+                } else if (people[i][0] < people[j][0] && people[i][1] < people[j][1]) {
+                    people[i][2] += 1;
+                } else {
+                    continue;
                 }
+            }
         }
         for (int i = 0; i < people.length; i++) {
             bw.write(people[i][2] + " ");

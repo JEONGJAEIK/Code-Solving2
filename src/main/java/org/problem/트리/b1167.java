@@ -1,9 +1,9 @@
 package org.problem.트리;
 
-
 import java.io.*;
 import java.util.*;
 
+// 골드 2 트리의 지름
 public class b1167 {
     static class Node {
         int to, weight;
@@ -34,7 +34,8 @@ public class b1167 {
 
             while (true) {
                 int to = Integer.parseInt(st.nextToken());
-                if (to == -1) break;
+                if (to == -1)
+                    break;
                 int dist = Integer.parseInt(st.nextToken());
                 tree.get(from).add(new Node(to, dist));
             }

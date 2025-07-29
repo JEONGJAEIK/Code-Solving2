@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
 
+// 골드 4 여행 가자
 public class b1976 {
     static class Node {
         int to, weight;

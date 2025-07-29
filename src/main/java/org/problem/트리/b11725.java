@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
+// 실버 2 트리의 부모 찾기
 public class b11725 {
 
     static List<List<Integer>> graph = new ArrayList<>();

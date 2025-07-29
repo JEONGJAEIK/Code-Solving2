@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
+// 실버 1 트리 순회
 public class b1991 {
 
     static class Node {
@@ -17,28 +18,39 @@ public class b1991 {
 
         void insert(String mid, String left, String right) {
             if (this.value.equals(mid)) {
-                if (!left.equals(".")) this.left = new Node(left);
-                if (!right.equals(".")) this.right = new Node(right);
+                if (!left.equals("."))
+                    this.left = new Node(left);
+                if (!right.equals("."))
+                    this.right = new Node(right);
             } else {
-                if (this.left != null) this.left.insert(mid, left, right);
-                if (this.right != null) this.right.insert(mid, left, right);
+                if (this.left != null)
+                    this.left.insert(mid, left, right);
+                if (this.right != null)
+                    this.right.insert(mid, left, right);
             }
         }
+
         void preorder() {
             System.out.print(this.value);
-            if (this.left != null) left.preorder();
-            if (this.right != null) right.preorder();
+            if (this.left != null)
+                left.preorder();
+            if (this.right != null)
+                right.preorder();
         }
 
         void inorder() {
-            if (this.left != null) left.inorder();
+            if (this.left != null)
+                left.inorder();
             System.out.print(this.value);
-            if (this.right != null) right.inorder();
+            if (this.right != null)
+                right.inorder();
         }
 
         void postorder() {
-            if (this.left != null) left.postorder();
-            if (this.right != null) right.postorder();
+            if (this.left != null)
+                left.postorder();
+            if (this.right != null)
+                right.postorder();
             System.out.print(this.value);
         }
     }
@@ -54,7 +66,6 @@ public class b1991 {
             String mid = st.nextToken();
             String left = st.nextToken();
             String right = st.nextToken();
-
 
             if (root == null) {
                 root = new Node(mid);

@@ -1,4 +1,4 @@
-package org.problem.bd우선탐색;
+package org.problem.bd우선탐색.골드;
 
 import java.io.BufferedReader;
 import java.io.IOException;

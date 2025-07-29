@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.StringTokenizer;
 
+// 실버 4 주몽
 public class b1940 {
     public static void main(String[] args) throws IOException {
 

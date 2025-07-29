@@ -1,4 +1,4 @@
-package org.example;
+package org.example.다익스트라;
 
 import java.util.*;
 
@@ -70,7 +70,54 @@ public class 다익스트라 {
         // 예시 그래프 실행 (정점 6개, 시작점 0번)
         dijkstra.runExample();
     }
-    
+    // 예시 그래프를 만들고 다익스트라 알고리즘을 실행하는 메서드
+    public void runExample() {
+        // 6개의 정점을 가진 그래프 생성 (정점 번호: 0, 1, 2, 3, 4, 5)
+        int vertices = 6;
+        List<List<Edge>> graph = new ArrayList<>();
+
+        // 각 정점마다 인접 리스트 초기화
+        for (int i = 0; i < vertices; i++) {
+            graph.add(new ArrayList<>());
+        }
+
+        // 그래프의 간선들을 추가 (방향 그래프)
+        // addEdge(그래프, 시작정점, 도착정점, 가중치)
+        addEdge(graph, 0, 1, 4);   // 0 → 1, 가중치 4
+        addEdge(graph, 0, 2, 2);   // 0 → 2, 가중치 2
+        addEdge(graph, 1, 2, 1);   // 1 → 2, 가중치 1
+        addEdge(graph, 1, 3, 5);   // 1 → 3, 가중치 5
+        addEdge(graph, 2, 3, 8);   // 2 → 3, 가중치 8
+        addEdge(graph, 2, 4, 10);  // 2 → 4, 가중치 10
+        addEdge(graph, 3, 4, 2);   // 3 → 4, 가중치 2
+        addEdge(graph, 3, 5, 6);   // 3 → 5, 가중치 6
+        addEdge(graph, 4, 5, 3);   // 4 → 5, 가중치 3
+
+        // 생성된 그래프 정보 출력
+        System.out.println("생성된 그래프 정보:");
+        printGraph(graph);
+        System.out.println();
+
+        // 시작점 0에서 다익스트라 알고리즘 실행
+        int startVertex = 0;
+        int[] shortestDistances = dijkstra(graph, startVertex);
+
+        // 최종 결과 출력
+        System.out.println("=== 최종 결과 ===");
+        System.out.println("정점 " + startVertex + "에서 각 정점까지의 최단거리:");
+        for (int i = 0; i < shortestDistances.length; i++) {
+            String distance = (shortestDistances[i] == Integer.MAX_VALUE) ? "도달 불가능" : String.valueOf(shortestDistances[i]);
+            System.out.println("정점 " + startVertex + " → 정점 " + i + ": " + distance);
+        }
+
+        // 경로 추적 예시 (정점 0에서 정점 5까지의 경로)
+        System.out.println();
+        System.out.println("예시: 정점 0에서 정점 5까지의 최단 경로 분석");
+        System.out.println("최단거리: " + shortestDistances[5]);
+        System.out.println("가능한 경로: 0 → 2 → 4 → 5 (거리: 2 + 10 + 3 = 15)");
+        System.out.println("더 짧은 경로: 0 → 1 → 3 → 5 (거리: 4 + 5 + 6 = 15)");
+        System.out.println("실제 최단경로: 0 → 1 → 3 → 4 → 5 (거리: 4 + 5 + 2 + 3 = 14)");
+    }
     // 다익스트라 알고리즘의 핵심 구현 메서드
     public int[] dijkstra(List<List<Edge>> graph, int start) {
         int n = graph.size();  // 정점의 개수
@@ -154,54 +201,7 @@ public class 다익스트라 {
         return distances;  // 시작점에서 모든 정점까지의 최단거리 배열 반환
     }
     
-    // 예시 그래프를 만들고 다익스트라 알고리즘을 실행하는 메서드
-    public void runExample() {
-        // 6개의 정점을 가진 그래프 생성 (정점 번호: 0, 1, 2, 3, 4, 5)
-        int vertices = 6;
-        List<List<Edge>> graph = new ArrayList<>();
-        
-        // 각 정점마다 인접 리스트 초기화
-        for (int i = 0; i < vertices; i++) {
-            graph.add(new ArrayList<>());
-        }
-        
-        // 그래프의 간선들을 추가 (방향 그래프)
-        // addEdge(그래프, 시작정점, 도착정점, 가중치)
-        addEdge(graph, 0, 1, 4);   // 0 → 1, 가중치 4
-        addEdge(graph, 0, 2, 2);   // 0 → 2, 가중치 2
-        addEdge(graph, 1, 2, 1);   // 1 → 2, 가중치 1
-        addEdge(graph, 1, 3, 5);   // 1 → 3, 가중치 5
-        addEdge(graph, 2, 3, 8);   // 2 → 3, 가중치 8
-        addEdge(graph, 2, 4, 10);  // 2 → 4, 가중치 10
-        addEdge(graph, 3, 4, 2);   // 3 → 4, 가중치 2
-        addEdge(graph, 3, 5, 6);   // 3 → 5, 가중치 6
-        addEdge(graph, 4, 5, 3);   // 4 → 5, 가중치 3
-        
-        // 생성된 그래프 정보 출력
-        System.out.println("생성된 그래프 정보:");
-        printGraph(graph);
-        System.out.println();
-        
-        // 시작점 0에서 다익스트라 알고리즘 실행
-        int startVertex = 0;
-        int[] shortestDistances = dijkstra(graph, startVertex);
-        
-        // 최종 결과 출력
-        System.out.println("=== 최종 결과 ===");
-        System.out.println("정점 " + startVertex + "에서 각 정점까지의 최단거리:");
-        for (int i = 0; i < shortestDistances.length; i++) {
-            String distance = (shortestDistances[i] == Integer.MAX_VALUE) ? "도달 불가능" : String.valueOf(shortestDistances[i]);
-            System.out.println("정점 " + startVertex + " → 정점 " + i + ": " + distance);
-        }
-        
-        // 경로 추적 예시 (정점 0에서 정점 5까지의 경로)
-        System.out.println();
-        System.out.println("예시: 정점 0에서 정점 5까지의 최단 경로 분석");
-        System.out.println("최단거리: " + shortestDistances[5]);
-        System.out.println("가능한 경로: 0 → 2 → 4 → 5 (거리: 2 + 10 + 3 = 15)");
-        System.out.println("더 짧은 경로: 0 → 1 → 3 → 5 (거리: 4 + 5 + 6 = 15)");
-        System.out.println("실제 최단경로: 0 → 1 → 3 → 4 → 5 (거리: 4 + 5 + 2 + 3 = 14)");
-    }
+
     
     // 그래프에 간선을 추가하는 헬퍼 메서드
     // 방향 그래프이므로 한 방향으로만 간선을 추가

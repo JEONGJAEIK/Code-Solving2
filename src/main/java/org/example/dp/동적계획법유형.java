@@ -1,4 +1,4 @@
-package org.example;
+package org.example.dp;
 
 import java.util.*;
 
@@ -55,7 +55,7 @@ import java.util.*;
 *   - 완전탐색: 모든 경우 다 확인, 비효율적
 */
 
-public class 동적계획법 {
+public class 동적계획법유형 {
     
     public static void main(String[] args) {
         // 실전 코딩테스트 방식 - 직접 입력으로 테스트

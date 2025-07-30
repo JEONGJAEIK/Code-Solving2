@@ -1,188 +1,155 @@
 package org.example;
 
+/*
+=== 플로이드-워셜(Floyd-Warshall) 알고리즘 ===
+
+【기본 개념】
+- 모든 정점 쌍 간의 최단 경로를 구하는 동적 계획법 알고리즘
+- 음수 가중치가 있는 그래프에서도 작동 (단, 음수 사이클은 없어야 함)
+- 3중 반복문을 사용하여 경유점을 하나씩 고려하며 최단 거리를 갱신
+
+【시간복잡도】
+- 시간복잡도: O(V³) - V는 정점의 개수
+- 공간복잡도: O(V²) - 2차원 배열 사용
+
+【선행 지식】
+- 그래프의 기본 개념 (정점, 간선, 가중치)
+- 동적 계획법(DP)의 기본 원리
+- 2차원 배열 다루기
+
+【적용 문제 유형】
+1. 모든 정점 쌍 간의 최단 거리를 구하는 문제
+2. 경유점을 통한 최단 경로 문제
+3. 그래프에서 특정 조건을 만족하는 경로 개수 문제
+4. 연결성 판단 문제 (경로 존재 여부)
+5. 게임 맵에서 최단 거리 문제 (격자가 아닌 그래프 형태)
+
+【비슷한 알고리즘과 구분점】
+1. 다익스트라(Dijkstra): 한 정점에서 모든 정점으로의 최단 경로
+   - 착각하기 쉬운 점: 다익스트라는 음수 가중치 불가, 플로이드-워셜은 가능
+   - 다익스트라는 O(ElogV), 플로이드-워셜은 O(V³)
+
+2. 벨만-포드(Bellman-Ford): 한 정점에서 모든 정점으로의 최단 경로 (음수 가중치 허용)
+   - 착각하기 쉬운 점: 벨만-포드는 음수 사이클 탐지 가능, 플로이드-워셜은 별도 처리 필요
+
+3. BFS: 가중치가 없는 그래프에서의 최단 경로
+   - 잘못된 접근: 가중치가 있는 그래프에서 BFS 사용하면 안됨
+
+【주의사항】
+- 정점 번호가 1부터 시작하는 경우와 0부터 시작하는 경우 구분 필요
+- INF 값 설정 시 오버플로우 주의 (두 INF를 더해도 오버플로우 안되게)
+- 자기 자신으로의 거리는 0으로 초기화
+*/
+
 public class 플로이드워셜 {
-    
-    // 무한대를 나타내는 상수 (연결되지 않은 정점 간의 거리)
-    // Integer.MAX_VALUE를 사용하면 덧셈 시 오버플로우 발생 가능하므로 
-    // 충분히 큰 값으로 설정 (문제에서 주어진 최대값의 2배 정도)
-    static final int INF = 987654321;
-    
+
+    // 무한대를 나타내는 상수 (Integer.MAX_VALUE/2를 사용하여 덧셈 시 오버플로우 방지)
+    static final int INF = Integer.MAX_VALUE / 2;
+
     public static void main(String[] args) {
-        // 예시 그래프: 4개의 정점 (0, 1, 2, 3)
-        int n = 4; // 정점의 개수
-        
-        // 인접행렬로 그래프 표현
-        // dist[i][j] = i에서 j로 가는 직접 경로의 가중치
-        int[][] dist = {
-            //   0   1   2   3
-            {   0,  5, INF,  10},  // 0번 정점에서
-            { INF,  0,   3, INF},  // 1번 정점에서  
-            { INF, INF,  0,   1},  // 2번 정점에서
-            { INF, INF, INF,  0}   // 3번 정점에서
-        };
-        
-        System.out.println("=== 플로이드-워셜 알고리즘 실행 ===");
-        System.out.println("초기 인접행렬:");
-        printMatrix(dist, n);
-        
-        // 플로이드-워셜 알고리즘 실행
-        floydWarshall(dist, n);
-        
-        System.out.println("\n최종 결과 (모든 정점 간 최단거리):");
-        printMatrix(dist, n);
-        
-        // 특정 경로들의 최단거리 출력
-        System.out.println("\n=== 주요 경로들의 최단거리 ===");
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                if (i != j) {
-                    if (dist[i][j] == INF) {
-                        System.out.println(i + " -> " + j + ": 경로 없음");
-                    } else {
-                        System.out.println(i + " -> " + j + ": " + dist[i][j]);
-                    }
-                }
-            }
-        }
-    }
-    
-    /**
-     * 플로이드-워셜 알고리즘의 핵심 구현
-     * 
-     * 핵심 아이디어: 
-     * - k번째 정점을 경유지로 사용했을 때 더 짧은 경로가 있는지 확인
-     * - dist[i][j] vs dist[i][k] + dist[k][j] 중 더 작은 값 선택
-     * 
-     * 왜 k를 가장 바깥 루프로 해야 할까?
-     * - k번째 정점을 경유지로 '완전히' 고려한 후 다음 경유지로 넘어가야 함
-     * - 만약 i나 j를 바깥 루프로 하면, 아직 고려되지 않은 경유지들 때문에
-     *   최적해를 놓칠 수 있음
-     */
-    static void floydWarshall(int[][] dist, int n) {
-        // k: 경유지로 사용할 정점 (0번부터 n-1번까지 차례로)
-        for (int k = 0; k < n; k++) {
-            System.out.println("\n--- " + k + "번 정점을 경유지로 고려 ---");
-            
-            // i: 출발 정점
-            for (int i = 0; i < n; i++) {
-                // j: 도착 정점  
-                for (int j = 0; j < n; j++) {
-                    
-                    // 자기 자신으로 가는 경로는 0이므로 스킵
-                    if (i == j) continue;
-                    
-                    // 현재 i에서 j로 가는 최단거리
-                    int currentDist = dist[i][j];
-                    
-                    // k를 경유해서 가는 경로의 거리
-                    // 주의: i->k 또는 k->j 경로가 없으면 (INF) 계산하지 않음
-                    if (dist[i][k] != INF && dist[k][j] != INF) {
-                        int viaDist = dist[i][k] + dist[k][j];
-                        
-                        // 경유해서 가는 경로가 더 짧으면 갱신
-                        if (viaDist < currentDist) {
-                            dist[i][j] = viaDist;
-                            System.out.println("  갱신: " + i + "->" + j + 
-                                             " (기존: " + (currentDist == INF ? "INF" : currentDist) + 
-                                             ", 새로운: " + viaDist + " via " + k + ")");
-                        }
-                    }
-                }
-            }
-            
-            // 각 단계별 결과 출력 (디버깅용)
-            System.out.println("현재 상태:");
-            printMatrix(dist, n);
-        }
-    }
-    
-    /**
-     * 행렬을 보기 좋게 출력하는 헬퍼 함수
-     */
-    static void printMatrix(int[][] matrix, int n) {
-        System.out.print("     ");
-        for (int j = 0; j < n; j++) {
-            System.out.printf("%4d ", j);
-        }
-        System.out.println();
-        
-        for (int i = 0; i < n; i++) {
-            System.out.printf("%2d : ", i);
-            for (int j = 0; j < n; j++) {
-                if (matrix[i][j] == INF) {
-                    System.out.print(" INF ");
+        // 실제 코딩테스트에서는 입력을 받지만, 여기서는 직접 입력
+
+        // 정점의 개수 (1번부터 시작한다고 가정)
+        int n = 4;
+
+        // 거리 배열 초기화 - dist[i][j] = i에서 j로 가는 최단 거리
+        int[][] dist = new int[n + 1][n + 1];
+
+        // 1단계: 거리 배열을 무한대로 초기화
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= n; j++) {
+                if (i == j) {
+                    dist[i][j] = 0; // 자기 자신으로의 거리는 0
                 } else {
-                    System.out.printf("%4d ", matrix[i][j]);
+                    dist[i][j] = INF; // 나머지는 무한대로 초기화
+                }
+            }
+        }
+
+        // 2단계: 주어진 간선 정보로 직접 연결된 경로의 거리 설정
+        // 예시: 1->2 (거리 3), 1->4 (거리 5), 2->3 (거리 2), 3->4 (거리 1)
+        dist[1][2] = 3;
+        dist[1][4] = 5;
+        dist[2][3] = 2;
+        dist[3][4] = 1;
+
+        // 3단계: 플로이드-워셜 알고리즘 실행
+        // k: 경유점 (1번부터 n번까지 모든 정점을 경유점으로 고려)
+        for (int k = 1; k <= n; k++) {
+            // i: 출발점
+            for (int i = 1; i <= n; i++) {
+                // j: 도착점
+                for (int j = 1; j <= n; j++) {
+                    // 핵심 아이디어: i에서 j로 직접 가는 것 vs k를 경유해서 가는 것 중 더 짧은 경로 선택
+                    // dist[i][j]: i에서 j로 가는 현재 최단 거리
+                    // dist[i][k] + dist[k][j]: i에서 k를 거쳐 j로 가는 거리
+
+                    // 오버플로우 방지: 두 거리가 모두 유효할 때만 비교
+                    if (dist[i][k] != INF && dist[k][j] != INF) {
+                        // 경유해서 가는 경로가 더 짧으면 갱신
+                        dist[i][j] = Math.min(dist[i][j], dist[i][k] + dist[k][j]);
+                    }
+                }
+            }
+        }
+
+        // 4단계: 결과 확인 및 출력 (실전에서는 문제에서 요구하는 대로)
+        System.out.println("=== 모든 정점 쌍 간의 최단 거리 ===");
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= n; j++) {
+                if (dist[i][j] == INF) {
+                    System.out.print("INF ");
+                } else {
+                    System.out.print(dist[i][j] + " ");
                 }
             }
             System.out.println();
         }
-    }
-    
-    /*
-     * ========== 추가 활용 예시 ==========
-     * 
-     * 1. 경로 복원 (실제 경로 찾기)
-     * - next 배열을 사용하여 실제 최단 경로상의 정점들을 추적
-     * 
-     * 2. 음수 사이클 탐지
-     * - 대각선 원소가 음수가 되면 음수 사이클 존재
-     * 
-     * 3. 도달 가능성 판단
-     * - dist[i][j] < INF 이면 i에서 j로 도달 가능
-     * 
-     * 4. 최단 경로 개수 세기
-     * - count 배열로 최단 경로의 개수 추적
-     */
-    
-    /**
-     * 경로 복원을 위한 플로이드-워셜 (참고용)
-     * 실제 코딩테스트에서 경로를 출력해야 할 때 사용
-     */
-    static void floydWarshallWithPath(int[][] dist, int[][] next, int n) {
-        // next[i][j] = i에서 j로 가는 최단경로에서 i 다음에 방문할 정점
-        
-        // 초기화: 직접 연결된 경우 next[i][j] = j
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                if (i != j && dist[i][j] != INF) {
-                    next[i][j] = j;
-                } else {
-                    next[i][j] = -1; // 경로 없음
-                }
+
+        // 5단계: 음수 사이클 탐지 (필요한 경우)
+        // 자기 자신으로의 거리가 음수가 되면 음수 사이클 존재
+        boolean hasNegativeCycle = false;
+        for (int i = 1; i <= n; i++) {
+            if (dist[i][i] < 0) {
+                hasNegativeCycle = true;
+                break;
             }
         }
-        
-        // 플로이드-워셜 + 경로 복원
-        for (int k = 0; k < n; k++) {
-            for (int i = 0; i < n; i++) {
-                for (int j = 0; j < n; j++) {
-                    if (dist[i][k] != INF && dist[k][j] != INF) {
-                        if (dist[i][k] + dist[k][j] < dist[i][j]) {
-                            dist[i][j] = dist[i][k] + dist[k][j];
-                            next[i][j] = next[i][k]; // 경로 정보 갱신
-                        }
-                    }
-                }
-            }
+
+        if (hasNegativeCycle) {
+            System.out.println("음수 사이클이 존재합니다!");
+        }
+
+        // 실전 예시: 특정 질의에 대한 답
+        // 예를 들어, 1번에서 3번으로 가는 최단 거리를 구하라는 문제라면:
+        if (dist[1][3] == INF) {
+            System.out.println("1에서 3으로 가는 경로가 없습니다.");
+        } else {
+            System.out.println("1에서 3으로 가는 최단 거리: " + dist[1][3]);
         }
     }
-    
+
     /*
-     * ========== 코딩테스트 팁 ==========
-     * 
-     * 1. 메모리 최적화가 필요한 경우:
-     *    - 정점 번호를 좌표압축으로 줄이기
-     *    - 실제로는 모든 쌍이 필요하지 않을 수 있음
-     * 
-     * 2. 시간복잡도 주의:
-     *    - N ≤ 400 정도까지가 플로이드-워셜 적용 가능한 범위
-     *    - 그 이상이면 다익스트라를 여러 번 실행 고려
-     * 
-     * 3. 실수하기 쉬운 점들:
-     *    - INF 값 설정 (오버플로우 주의)
-     *    - 루프 순서 (k-i-j 순서 반드시 지키기)
-     *    - 자기 자신으로의 거리는 0으로 초기화
-     *    - 입력에서 양방향 그래프인지 단방향 그래프인지 확인
-     */
+    【플로이드-워셜의 핵심 원리 상세 설명】
+
+    왜 k를 가장 바깥 반복문으로 해야 할까?
+    - k번째 정점을 경유점으로 고려할 때, 이전 단계(k-1까지)에서 구한 최적해를 바탕으로 계산
+    - 즉, dist[i][k]와 dist[k][j]는 이미 k-1번째까지의 경유점을 고려한 최단 거리
+    - 이를 통해 점진적으로 모든 경유점을 고려한 최종 최단 거리를 구함
+
+    동적 계획법의 점화식:
+    dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j])
+    - 상태: dist[i][j] = 1~k번 정점을 경유점으로 고려했을 때 i에서 j로의 최단 거리
+    - 전이: k번 정점을 경유하거나 경유하지 않거나 중 더 좋은 선택
+
+    시간복잡도가 O(V³)인 이유:
+    - 3중 반복문: 경유점 V개 × 출발점 V개 × 도착점 V개 = V³
+    - 각 연산은 O(1)이므로 전체 O(V³)
+
+    언제 플로이드-워셜을 사용해야 할까?
+    1. 모든 정점 쌍의 최단 거리가 필요한 경우
+    2. 정점 수가 적고(보통 400개 이하) 간선 수가 많은 경우
+    3. 음수 가중치가 있지만 음수 사이클은 없는 경우
+    4. 여러 번의 최단 거리 질의가 있는 경우
+    */
 }

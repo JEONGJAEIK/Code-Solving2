@@ -4,7 +4,7 @@ import java.util.*;
 
 /*
 === 그래프 표현 방법들 (Graph Representation) ===
-
+【목표】
 【기본 개념】
 그래프를 메모리에 저장하는 방법에는 크게 3가지가 있음:
 1. 인접 행렬 (Adjacency Matrix)

@@ -63,7 +63,7 @@ import java.util.*;
  * - 길이만 필요한데 실제 문자열까지 구하려고 할 때 (불필요한 복잡도 증가)
  */
 
-public class 최장공통부분수열 {
+public class LCS2 {
 
     public static void main(String[] args) {
         System.out.println("=== 최장공통부분수열(LCS) 알고리즘 실행 ===");

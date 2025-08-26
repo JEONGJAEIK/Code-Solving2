@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 
-// 골드 4 별 찍기 11
 public class b2448 {
     static char[][] map;
 

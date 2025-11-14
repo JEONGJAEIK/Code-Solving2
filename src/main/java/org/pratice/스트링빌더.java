@@ -4,7 +4,7 @@ public class 스트링빌더 {
     public static void main(String[] args) {
         StringBuilder sb = new StringBuilder("ABC");
 
-        while (sb.length() > 0) {
+        while (!sb.isEmpty()) {
             sb.deleteCharAt(sb.length() - 1);
             System.out.println(sb);
         }

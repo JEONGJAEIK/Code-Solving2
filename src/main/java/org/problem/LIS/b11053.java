@@ -1,4 +1,4 @@
-package org.problem.dp.LIS;
+package org.problem.LIS;
 
 import java.io.BufferedReader;
 import java.io.IOException;

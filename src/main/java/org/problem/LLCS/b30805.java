@@ -1,4 +1,4 @@
-package org.problem.dp.LLCS;
+package org.problem.LLCS;
 
 import java.io.BufferedReader;
 import java.io.IOException;

@@ -18,7 +18,6 @@ public class b15681 {
         StringTokenizer st = new StringTokenizer(br.readLine());
 
         // 정점 U를 루트로 하는 서브트리에 속한 정점의 수를 출력
-
         int nodeCount = Integer.parseInt(st.nextToken()); // 정점의 수 최대 십만
         int rootNumber = Integer.parseInt(st.nextToken()); // 루트 번호 최대 십만
         int queryCount = Integer.parseInt(st.nextToken()); // 쿼리의 수 최대 십만

@@ -1,4 +1,4 @@
-package org.problem.dp.LCS;
+package org.problem.LCS;
 
 import java.io.BufferedReader;
 import java.io.IOException;

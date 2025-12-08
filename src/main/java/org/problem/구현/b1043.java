@@ -1,4 +1,4 @@
-package org.problem.시뮬레이션;
+package org.problem.구현;
 
 import java.io.BufferedReader;
 import java.io.IOException;

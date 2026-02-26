@@ -19,11 +19,11 @@ public class p43105 {
         // dp[1][0] = dp[0][0] + triangle[1][0];
         // dp[1][1] = dp[0][0] + triangle[1][1];
         // dp[2][0] = dp[1][0] + triangle[2][0];
-        // dp[2][1] = Math.max(dp[1][0], dp[1][1]) + triange[2][1];
+        // dp[2][1] = Math.max(dp[1][0], dp[1][1]) + triangle[2][1];
         // dp[2][2] = dp[1][1] + triangle[2][2];
         // dp[3][0] = dp[2][0] + triangle[3][0];
-        // dp[3][1] = Math.max(dp[2][0], dp[2][1]) + triange[3][1];
-        // dp[3][2] = Math.max(dp[2][1], dp[2][2]) + triange[3][1];
+        // dp[3][1] = Math.max(dp[2][0], dp[2][1]) + triangle[3][1];
+        // dp[3][2] = Math.max(dp[2][1], dp[2][2]) + triangle[3][1];
         // dp[3][3] = dp[2][2] + triangle[3][3];
 
         // 이제 보인다

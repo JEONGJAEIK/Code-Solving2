@@ -1,4 +1,4 @@
-package org.problem.정수론;
+package org.problem.수학;
 
 import java.io.*;
 

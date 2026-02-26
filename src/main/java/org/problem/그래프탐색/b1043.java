@@ -1,4 +1,4 @@
-package org.problem.구현;
+package org.problem.그래프탐색;
 
 import java.io.BufferedReader;
 import java.io.IOException;

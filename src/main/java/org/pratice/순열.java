@@ -15,6 +15,9 @@ public class 순열 {
         for (List<Integer> integers : result) {
             System.out.println(integers);
         }
+
+        String aa = "dd";
+        char[] dd = aa.toCharArray();
     }
 
     static void dd () {

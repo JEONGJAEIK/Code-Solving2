@@ -1,35 +1,62 @@
 package org.pratice;
 
+import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 
 class Solution {
-    public void solution(int N, int[] stages) {
-        int[] answer = new int[N];
-        int[] challengers = new int[N + 2];
 
-        for (int stage : stages) {
-            challengers[stage] += 1;
+
+    public static void main(String[] args) {
+        int n = 3;
+        int[][] computers = new int[][]{{1, 1, 0}, {1, 1, 0}, {0, 0, 1}};
+        int solution = solution(n, computers);
+        System.out.println(solution);
+    }
+    static int[] parent;
+    public static int solution(int n, int[][] computers) {
+        parent = new int[computers.length];
+        for (int i = 0; i < parent.length; i++) {
+            parent[i] = i;
         }
 
-        Map<Integer, Double> fails = new HashMap<>();
-        double total = stages.length;
-
-        for(int i = 1; i < challengers.length; i++) {
-            if (challengers[i] == 0) {
-                fails.put(i, 0.0);
-            } else {
-                fails.put(i, challengers[i] / total);
-                total -= challengers[i];
+        for (int i = 0; i < computers.length; i++) {
+            for (int j = 0; j < computers.length; j++) {
+                if (computers[i][j] != 0 && computers[i][j] == computers[j][i]) {
+                    union(i, j);
+                }
             }
         }
 
-        int[] array = fails.entrySet().stream().sorted((o1, o2) ->
-                o1.getValue().equals(o2.getValue())
-                        ? Integer.compare(o1.getKey(), o2.getKey())
-                        : Double.compare(o2.getValue(), o1.getValue())).mapToInt(Map.Entry::getKey).toArray();
+        int count = 0;
+        int m = 0;
+        for (int i : parent) {
+            if (m != i) {
+                count++;
+                m = i;
+            }
+        }
 
 
+
+
+        return count;
+    }
+
+    public static void union(int x, int y) {
+        int rootX = find(x);
+        int rootY = find(y);
+
+        if (rootX != rootY) {
+            parent[rootY] = rootX;
+        }
+    }
+
+    public static int find(int x) {
+        if (x == parent[x]) {
+            return x;
+        }
+
+        return parent[x] = find(parent[x]);
     }
 }

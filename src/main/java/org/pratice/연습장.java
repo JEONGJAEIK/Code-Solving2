@@ -3,6 +3,19 @@ package org.pratice;
 import java.util.*;
 
 public class 연습장 {
+
+
+    static class Node {
+        public int next;
+        public int cost;
+
+        public Node(int next, int cost) {
+            this.next = next;
+            this.cost = cost;
+        }
+    }
+
+
     public static void main(String[] args) {
         List<Integer> list = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
@@ -40,5 +53,16 @@ public class 연습장 {
             System.out.print(next);
         }
         System.out.println();
+
+        // [출발인덱스] = 노드
+        List<Node>[] array = new ArrayList[5];
+        for (int i = 0; i < 5; i++) {
+            array[i] = new ArrayList<>();
+        }
+
+        array[0].add(new Node(1, 2));
+        System.out.println(array[0].get(0).cost + ", " +  array[0].get(0).next);
     }
+
+
 }
